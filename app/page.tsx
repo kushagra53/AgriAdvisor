@@ -1,5 +1,4 @@
 "use client"
-
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -21,17 +20,30 @@ import {
   ArrowUp,
   ArrowDown,
   AlertTriangle,
+  Moon,
+  SunMedium,
 } from "lucide-react"
 
 export default function HomePage() {
   const [location, setLocation] = useState<string>("Getting location...")
+  const [darkMode, setDarkMode] = useState(false)
+
+  // Sync dark mode class on document root
+  useEffect(() => {
+    const root = document.documentElement
+    if (darkMode) {
+      root.classList.add("dark")
+    } else {
+      root.classList.remove("dark")
+    }
+  }, [darkMode])
+
   const [weather, setWeather] = useState({
     temperature: 28,
     humidity: 65,
     windSpeed: 12,
     condition: "Partly Cloudy",
   })
-
   const [bestCrops, setBestCrops] = useState([
     {
       name: "Tomatoes",
@@ -58,12 +70,10 @@ export default function HomePage() {
       priceChange: "-3%",
     },
   ])
-
   useEffect(() => {
-    // Simulate getting user location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        () => {
           setLocation("Current Location")
         },
         () => {
@@ -85,15 +95,21 @@ export default function HomePage() {
               <span>{location}</span>
             </div>
           </div>
-          <Link href="/chat">
-            <Button variant="outline" size="sm">
-              <MessageCircle className="h-4 w-4 mr-2" />
-              AI Assistant
+          <div className="flex items-center gap-2">
+            {/* Dark Mode Toggle Button */}
+            <Button variant="outline" size="sm" onClick={() => setDarkMode(!darkMode)}>
+              {darkMode ? <SunMedium className="h-4 w-4 mr-2" /> : <Moon className="h-4 w-4 mr-2" />}
+              {darkMode ? "Light Mode" : "Dark Mode"}
             </Button>
-          </Link>
+            <Link href="/chat">
+              <Button variant="outline" size="sm">
+                <MessageCircle className="h-4 w-4 mr-2" />
+                AI Assistant
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
-
       {/* Main Content */}
       <main className="p-4 space-y-6">
         <Card className="border-primary/20">
@@ -137,7 +153,6 @@ export default function HomePage() {
             </Button>
           </CardContent>
         </Card>
-
         {/* Weather Card */}
         <Link href="/weather">
           <Card className="cursor-pointer hover:shadow-md transition-shadow">
@@ -180,7 +195,6 @@ export default function HomePage() {
             </CardContent>
           </Card>
         </Link>
-
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-4">
           <Link href="/disease-detection">
@@ -194,7 +208,6 @@ export default function HomePage() {
               </CardContent>
             </Card>
           </Link>
-
           <Link href="/market-trends">
             <Card className="cursor-pointer hover:shadow-md transition-shadow">
               <CardContent className="p-6 text-center">
@@ -207,7 +220,6 @@ export default function HomePage() {
             </Card>
           </Link>
         </div>
-
         <Card>
           <CardHeader>
             <CardTitle>Today's Recommendations</CardTitle>
@@ -236,7 +248,6 @@ export default function HomePage() {
             </div>
           </CardContent>
         </Card>
-
         {/* Recent Activity */}
         <Card>
           <CardHeader>
@@ -273,7 +284,6 @@ export default function HomePage() {
           </CardContent>
         </Card>
       </main>
-
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border">
         <div className="grid grid-cols-4 gap-1">
@@ -303,7 +313,6 @@ export default function HomePage() {
           </Link>
         </div>
       </nav>
-
       {/* Spacer for bottom navigation */}
       <div className="h-16"></div>
     </div>
