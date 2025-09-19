@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import WeatherCard from '../components/WeatherCard';
+
 import {
   Cloud,
   Thermometer,
@@ -24,6 +26,7 @@ import {
 } from "lucide-react"
 
 export default function HomePage() {
+  const [headerLocation, setHeaderLocation] = useState<string>("Detecting location...");
   const [location, setLocation] = useState<string>("Getting location...")
   const [weather, setWeather] = useState({
     temperature: 28,
@@ -82,7 +85,7 @@ export default function HomePage() {
             <h1 className="text-2xl font-serif font-bold text-primary">AgriAdvisor</h1>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <MapPin className="h-4 w-4" />
-              <span>{location}</span>
+              <span>{headerLocation}</span>
             </div>
           </div>
           <Link href="/chat">
@@ -136,50 +139,10 @@ export default function HomePage() {
               View Detailed Analysis
             </Button>
           </CardContent>
-        </Card>
+        </Card> 
 
-        {/* Weather Card */}
-        <Link href="/weather">
-          <Card className="cursor-pointer hover:shadow-md transition-shadow">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Cloud className="h-5 w-5 text-primary" />
-                Today's Weather
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <Thermometer className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold">{weather.temperature}°C</p>
-                    <p className="text-sm text-muted-foreground">Temperature</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <Droplets className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold">{weather.humidity}%</p>
-                    <p className="text-sm text-muted-foreground">Humidity</p>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Wind className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{weather.windSpeed} km/h</span>
-                </div>
-                <Badge variant="outline" className="border-primary text-primary">
-                  {weather.condition}
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
+        <WeatherCard onLocation={setHeaderLocation}/>
+
 
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-4">
